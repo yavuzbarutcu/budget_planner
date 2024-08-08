@@ -1,0 +1,43 @@
+@serviceName = planner
+###
+# @name QueryBudgets
+GET http://localhost:4004/odata/v4/{{serviceName}}/Budget
+
+### 
+# @name CreateNewBudget
+POST http://localhost:4004/odata/v4/{{serviceName}}/Budget
+Content-Type: application/json
+
+{
+  "createdAt": null,
+  "createdBy": null,
+  "modifiedAt": null,
+  "modifiedBy": null,
+  "validFrom": "2024-08-07T09:09:04.964Z",
+  "validTo": "2025-08-07T09:09:04.964Z",
+  "Modifier_U_ID": null,
+  "ParentBudget_U_ID": "9123d2cf-37c3-4fca-b86e-56b32d677e2d",
+  "type": "Type1",
+  "description": "Grand Child",
+  "phase": null,
+  "Responsible_U_ID": "U1",
+  "Material_U_ID": "M1",
+  "budVal": null,
+  "budDistrib": null,
+  "budOpen": null
+}
+
+### 
+# @name CreateNewSubBudget
+POST http://localhost:4004/odata/v4/{{serviceName}}/Budget
+Content-Type: application/json
+
+{"title": "BANANAS Long And Thanks For All The Fish"}
+
+### 
+# @name ReadSpecificBudget
+GET http://localhost:4004/odata/v4/{{serviceName}}/Budget({{U_ID}})
+
+### 
+# @name DeleteSpecificBudget
+DELETE http://localhost:4004/odata/v4/{{serviceName}}/Budget({{U_ID}})

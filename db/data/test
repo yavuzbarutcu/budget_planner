@@ -1,0 +1,12 @@
+U_ID,id,description
+M1,1,Material 1
+M2,2,Material 2
+
+
+U_ID,id,first_name,last_name,email,login_name
+U1,1,Max,Mustermann,m.mustermann@reply.de,mmustermann
+
+
+U_ID,Modifier_U_ID,ParentBudget_U_ID,type,description,phase,Responsible_U_ID,Material_U_ID,budVal,budDistrib,budOpen,createdAt,createdBy,modifiedAt,modifiedBy,validFrom,validTo
+B1,,,Type1,Budget 1 Parent,,U1,M1,,,,,,,,2024-08-07T09:09:04.964Z,2025-08-07T09:09:04.964Z
+B2,,B1,Type1,Budget 2 Child,,U1,M1,,,,,,,,2024-08-07T09:09:04.964Z,2025-08-07T09:09:04.964Z

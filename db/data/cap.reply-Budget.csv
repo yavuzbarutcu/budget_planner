@@ -1,0 +1,4 @@
+U_ID,Modifier_U_ID,ParentBudget_U_ID,type,description,phase,Responsible_U_ID,Material_U_ID,budVal,budDistrib,budOpen,createdAt,createdBy,modifiedAt,modifiedBy,validFrom,validTo
+46499bb1-6779-4710-a6a0-f69d5c4a9fc0,,,Type1,Budget 1 Parent,,U1,M1,,,,,,,,2024-08-07T09:09:04.964Z,2025-08-07T09:09:04.964Z
+9123d2cf-37c3-4fca-b86e-56b32d677e2d,,46499bb1-6779-4710-a6a0-f69d5c4a9fc0,Type1,Budget 2 Child,,U1,M1,,,,,,,,2024-08-07T09:09:04.964Z,2025-08-07T09:09:04.964Z
+30220e71-a47c-4283-b77d-7d5140433dc1,,9123d2cf-37c3-4fca-b86e-56b32d677e2d,Type1,Budget 3 Grand Child,,U1,M1,,,,,,,,2024-08-07T09:09:04.964Z,2025-08-07T09:09:04.964Z

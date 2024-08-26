@@ -19,4 +19,6 @@ module.exports = async function (){
   this.after ('READ','Budget', budget => {
     if (budget.budVal <= 0) logger("Budget has no value " + budget.budVal)
   })
+
+  //this.on ('CreateBudget'), req => CREATE ( req._target)
 }

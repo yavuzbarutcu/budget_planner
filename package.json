@@ -12,13 +12,15 @@
   "devDependencies": {
     "@cap-js/cds-types": "^0.6",
     "@cap-js/sqlite": "^1",
-    "@sap/ux-specification": "^1.120.15"
+    "@sap/ux-specification": "^1.120.17"
   },
   "scripts": {
     "start": "cds-serve",
-    "watch-fiori_ui": "cds watch --open fiori_ui/webapp/index.html?sap-ui-xx-viewCache=false"
+    "watch-fiori_ui": "cds watch --open fiori_ui/webapp/index.html?sap-ui-xx-viewCache=false",
+    "watch-budget_planner": "cds watch --open budget_planner/webapp/index.html?sap-ui-xx-viewCache=false"
   },
   "sapux": [
-    "app/fiori_ui"
+    "app/fiori_ui",
+    "app/budget_planner"
   ]
 }

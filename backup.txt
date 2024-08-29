@@ -1,0 +1,371 @@
+using planner as service from '../../srv/service';
+annotate service.Budget with @(
+    UI.FieldGroup #GeneratedGroup : {
+        $Type : 'UI.FieldGroupType',
+        Data : [
+            {
+                $Type : 'UI.DataField',
+                Value : U_ID,
+                Label : 'ID',
+            },
+            {
+                $Type : 'UI.DataField',
+                Label : 'Desc',
+                Value : description,
+            },
+            {
+                $Type : 'UI.DataField',
+                Label : 'Valid From',
+                Value : validFrom,
+            },
+            {
+                $Type : 'UI.DataField',
+                Label : 'Valid Until',
+                Value : validTo,
+            },
+            {
+                $Type : 'UI.DataField',
+                Value : createdAt,
+            },
+            {
+                $Type : 'UI.DataField',
+                Label : 'Type',
+                Value : type,
+            },
+            {
+                $Type : 'UI.DataField',
+                Label : 'Phase',
+                Value : phase,
+            },
+            {
+                $Type : 'UI.DataField',
+                Label : 'Budget Value',
+                Value : budVal,
+            },
+            {
+                $Type : 'UI.DataField',
+                Label : 'Distibuted',
+                Value : budDistrib,
+            },
+            {
+                $Type : 'UI.DataField',
+                Value : budOpen,
+                Label : 'Open',
+            },
+        ],
+    },
+    UI.Facets : [
+        {
+            $Type : 'UI.ReferenceFacet',
+            ID : 'GeneratedFacet1',
+            Label : 'Budget Header',
+            Target : '@UI.FieldGroup#GeneratedGroup',
+        },
+        {
+            $Type : 'UI.ReferenceFacet',
+            Label : 'Sub Budgets',
+            ID : 'ChildBudgetList',
+            Target : 'childBudgets/@UI.LineItem#ChildBudgetList',
+        },
+    ],
+    UI.LineItem : [
+        {
+            $Type : 'UI.DataField',
+            Value : U_ID,
+            Label : 'U_ID',
+            ![@UI.Hidden] : true,
+        },
+        {
+            $Type : 'UI.DataField',
+            Label : 'Desc',
+            Value : description,
+        },
+        {
+            $Type : 'UI.DataField',
+            Label : 'Valid From',
+            Value : validFrom,
+        },
+        {
+            $Type : 'UI.DataField',
+            Label : 'Valid Until',
+            Value : validTo,
+        },
+        {
+            $Type : 'UI.DataField',
+            Label : 'Budget Type',
+            Value : type,
+        },
+        {
+            $Type : 'UI.DataField',
+            Label : 'Phase',
+            Value : phase,
+        },
+        {
+            $Type : 'UI.DataField',
+            Value : Responsible.first_name,
+            Label : 'Responsible Name',
+        },
+        {
+            $Type : 'UI.DataField',
+            Value : Responsible.last_name,
+            Label : 'Responsible Last Name',
+        },
+        {
+            $Type : 'UI.DataField',
+            Value : Responsible.email,
+            Label : 'Responsible Email',
+        },
+        {
+            $Type : 'UI.DataFieldForAction',
+            Action : 'planner.EntityContainer/newBudget',
+            Label : 'New Budget',
+        },
+        {
+            $Type : 'UI.DataFieldForAction',
+            Action : 'planner.EntityContainer/copyBudget',
+            Label : 'Copy Budget',
+        },
+    ],
+    UI.SelectionPresentationVariant #table : {
+        $Type : 'UI.SelectionPresentationVariantType',
+        PresentationVariant : {
+            $Type : 'UI.PresentationVariantType',
+            Visualizations : [
+                '@UI.LineItem',
+            ],
+        },
+        SelectionVariant : {
+            $Type : 'UI.SelectionVariantType',
+            SelectOptions : [
+            ],
+        },
+    },
+    UI.SelectionFields : [
+        Responsible.email,
+        Responsible.first_name,
+        Responsible.last_name,
+        type,
+    ],
+    UI.LineItem #ChildBudgetList : [
+        {
+            $Type : 'UI.DataField',
+            Value : U_ID,
+            Label : 'U_ID',
+        },
+        {
+            $Type : 'UI.DataField',
+            Value : Responsible.first_name,
+            Label : 'Responsible',
+        },
+        {
+            $Type : 'UI.DataField',
+            Value : description,
+            Label : 'Desc',
+        },
+        {
+            $Type : 'UI.DataField',
+            Value : budVal,
+            Label : 'Budget',
+        },
+        {
+            $Type : 'UI.DataField',
+            Value : phase,
+            Label : 'Phase',
+        },
+        {
+            $Type : 'UI.DataField',
+            Value : budDistrib,
+            Label : 'Distributed',
+        },
+        {
+            $Type : 'UI.DataField',
+            Value : budOpen,
+            Label : 'Open',
+        },
+        {
+            $Type : 'UI.DataFieldForAction',
+            Action : 'planner.EntityContainer/addChildBudget',
+            Label : 'Add',
+        },
+        {
+            $Type : 'UI.DataFieldForAction',
+            Action : 'planner.EntityContainer/autoAllocateBudget',
+            Label : 'Automatic Allocate',
+        },
+        {
+            $Type : 'UI.DataFieldForAction',
+            Action : 'planner.EntityContainer/calculateBudget',
+            Label : 'Calculate Budget',
+        },
+        {
+            $Type : 'UI.DataFieldForAction',
+            Action : 'planner.EntityContainer/calculateShare',
+            Label : 'Calculate Share',
+        },
+        {
+            $Type : 'UI.DataField',
+            Value : ParentBudget_U_ID,
+            Label : 'ParentBudget_U_ID',
+        },
+    ],
+    UI.SelectionPresentationVariant #ChildBudgetList : {
+        $Type : 'UI.SelectionPresentationVariantType',
+        PresentationVariant : {
+            $Type : 'UI.PresentationVariantType',
+            Visualizations : [
+                '@UI.LineItem#ChildBudgetList',
+            ],
+        },
+        SelectionVariant : {
+            $Type : 'UI.SelectionVariantType',
+            SelectOptions : [
+            ],
+        },
+    },
+    UI.SelectionPresentationVariant #ChildBudgetList1 : {
+        $Type : 'UI.SelectionPresentationVariantType',
+        PresentationVariant : {
+            $Type : 'UI.PresentationVariantType',
+            Visualizations : [
+                '@UI.LineItem#ChildBudgetList',
+            ],
+        },
+        SelectionVariant : {
+            $Type : 'UI.SelectionVariantType',
+            SelectOptions : [
+            ],
+        },
+    },
+);
+
+annotate service.Budget with {
+    Modifier @Common.ValueList : {
+        $Type : 'Common.ValueListType',
+        CollectionPath : 'Users',
+        Parameters : [
+            {
+                $Type : 'Common.ValueListParameterInOut',
+                LocalDataProperty : Modifier_U_ID,
+                ValueListProperty : 'U_ID',
+            },
+            {
+                $Type : 'Common.ValueListParameterDisplayOnly',
+                ValueListProperty : 'id',
+            },
+            {
+                $Type : 'Common.ValueListParameterDisplayOnly',
+                ValueListProperty : 'first_name',
+            },
+            {
+                $Type : 'Common.ValueListParameterDisplayOnly',
+                ValueListProperty : 'last_name',
+            },
+            {
+                $Type : 'Common.ValueListParameterDisplayOnly',
+                ValueListProperty : 'email',
+            },
+        ],
+    }
+};
+
+annotate service.Budget with {
+    ParentBudget @Common.ValueList : {
+        $Type : 'Common.ValueListType',
+        CollectionPath : 'Budget',
+        Parameters : [
+            {
+                $Type : 'Common.ValueListParameterInOut',
+                LocalDataProperty : ParentBudget_U_ID,
+                ValueListProperty : 'U_ID',
+            },
+            {
+                $Type : 'Common.ValueListParameterDisplayOnly',
+                ValueListProperty : 'validFrom',
+            },
+            {
+                $Type : 'Common.ValueListParameterDisplayOnly',
+                ValueListProperty : 'validTo',
+            },
+            {
+                $Type : 'Common.ValueListParameterDisplayOnly',
+                ValueListProperty : 'type',
+            },
+            {
+                $Type : 'Common.ValueListParameterDisplayOnly',
+                ValueListProperty : 'description',
+            },
+        ],
+    }
+};
+
+annotate service.Budget with {
+    Responsible @Common.ValueList : {
+        $Type : 'Common.ValueListType',
+        CollectionPath : 'Users',
+        Parameters : [
+            {
+                $Type : 'Common.ValueListParameterInOut',
+                LocalDataProperty : Responsible_U_ID,
+                ValueListProperty : 'U_ID',
+            },
+            {
+                $Type : 'Common.ValueListParameterDisplayOnly',
+                ValueListProperty : 'id',
+            },
+            {
+                $Type : 'Common.ValueListParameterDisplayOnly',
+                ValueListProperty : 'first_name',
+            },
+            {
+                $Type : 'Common.ValueListParameterDisplayOnly',
+                ValueListProperty : 'last_name',
+            },
+            {
+                $Type : 'Common.ValueListParameterDisplayOnly',
+                ValueListProperty : 'email',
+            },
+        ],
+    }
+};
+
+annotate service.Budget with {
+    Material @Common.ValueList : {
+        $Type : 'Common.ValueListType',
+        CollectionPath : 'Matrial',
+        Parameters : [
+            {
+                $Type : 'Common.ValueListParameterInOut',
+                LocalDataProperty : Material_U_ID,
+                ValueListProperty : 'U_ID',
+            },
+            {
+                $Type : 'Common.ValueListParameterDisplayOnly',
+                ValueListProperty : 'id',
+            },
+            {
+                $Type : 'Common.ValueListParameterDisplayOnly',
+                ValueListProperty : 'description',
+            },
+        ],
+    }
+};
+
+annotate service.Users with {
+    email @Common.Label : 'Responsible/email'
+};
+
+annotate service.Users with {
+    first_name @(
+        Common.Label : 'Responsible/first_name',
+        Common.Text : last_name,
+    )
+};
+
+annotate service.Users with {
+    last_name @Common.Label : 'Responsible/last_name'
+};
+
+annotate service.Budget with {
+    type @Common.Label : 'type'
+};
+

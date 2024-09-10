@@ -139,7 +139,8 @@
                     }
                   }
                 }
-              }
+              },
+              "initialLoad": "Enabled"
             }
           }
         },
@@ -157,6 +158,15 @@
                   "tableSettings": {
                     "type": "ResponsiveTable",
                     "selectionMode": "Single"
+                  }
+                },
+                "@com.sap.vocabularies.UI.v1.FieldGroup#BudgetInfo": {
+                  "actions": {
+                    "DataFieldForAction::planner.addChildBudget": {
+                      "afterExecution": {
+                        "enableAutoScroll": true
+                      }
+                    }
                   }
                 }
               }

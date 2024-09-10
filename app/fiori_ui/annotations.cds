@@ -122,11 +122,6 @@ annotate service.Budget with @(
         },
         {
             $Type : 'UI.DataFieldForAction',
-            Action : 'planner.EntityContainer/addChildBudget',
-            Label : 'Add'
-        },
-        {
-            $Type : 'UI.DataFieldForAction',
             Action : 'planner.EntityContainer/autoAllocateBudget',
             Label : 'Automatic Allocate',
         },
@@ -142,10 +137,14 @@ annotate service.Budget with @(
         },
         {
             $Type : 'UI.DataFieldForAction',
-            Action : 'planner.EntityContainer/goToBudget',
+            Action : 'planner.goToBudget',
             Label : 'Details',
             Inline : true,
-            ![@UI.Importance] : #High,
+        },
+        {
+            $Type : 'UI.DataFieldForAction',
+            Action : 'planner.deleteSubBudget',
+            Label : 'Delete',
         },
     ],
     UI.FieldGroup #BudgetInfo : {
@@ -204,6 +203,11 @@ annotate service.Budget with @(
                 $Type : 'UI.DataField',
                 Value : budOpen,
                 Label : 'Budget Open',
+            },
+            {
+                $Type : 'UI.DataFieldForAction',
+                Action : 'planner.addChildBudget',
+                Label : 'Add Sub Budget',
             },
         ],
     },

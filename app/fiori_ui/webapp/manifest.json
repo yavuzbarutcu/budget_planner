@@ -158,6 +158,11 @@
                   "tableSettings": {
                     "type": "ResponsiveTable",
                     "selectionMode": "Single"
+                  },
+                  "actions": {
+                    "DataFieldForAction::planner.deleteSubBudget": {
+                      "enableOnSelect": "single"
+                    }
                   }
                 },
                 "@com.sap.vocabularies.UI.v1.FieldGroup#BudgetInfo": {

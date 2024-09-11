@@ -3,7 +3,17 @@ using planner as service from '../../srv/service';
 annotate service.Budget with @(
   Capabilities.InsertRestrictions : {
     Insertable : true,
-  }
+  },
+    UI.FieldGroup #description : {
+        $Type : 'UI.FieldGroupType',
+        Data : [
+            {
+                $Type : 'UI.DataField',
+                Value : description,
+                Label : 'description',
+            },
+        ],
+    },
 );
 
 annotate service.Budget with @(
@@ -42,6 +52,7 @@ annotate service.Budget with @(
             $Type : 'UI.DataField',
             Value : budVal,
             Label : 'Budget',
+            ![@UI.Importance] : #High,
         },
         {
             $Type : 'UI.DataField',
@@ -65,10 +76,8 @@ annotate service.Budget with @(
         },
         {
             $Type : 'UI.DataFieldForAction',
-            Action : 'planner.EntityContainer/copyBudget',
+            Action : 'planner.copyBudget',
             Label : 'Copy Budget',
-            Inline : true,
-            ![@UI.Importance] : #High,
         },
     ],
     UI.Facets : [
@@ -122,11 +131,6 @@ annotate service.Budget with @(
         },
         {
             $Type : 'UI.DataFieldForAction',
-            Action : 'planner.EntityContainer/autoAllocateBudget',
-            Label : 'Automatic Allocate',
-        },
-        {
-            $Type : 'UI.DataFieldForAction',
             Action : 'planner.EntityContainer/calculateBudget',
             Label : 'Calculate Budget',
         },
@@ -140,11 +144,12 @@ annotate service.Budget with @(
             Action : 'planner.goToBudget',
             Label : 'Details',
             Inline : true,
+            ![@UI.Importance] : #High,
         },
         {
             $Type : 'UI.DataFieldForAction',
             Action : 'planner.deleteSubBudget',
-            Label : 'Delete',
+            Label : 'Delete Sub Budget',
         },
     ],
     UI.FieldGroup #BudgetInfo : {
@@ -209,6 +214,11 @@ annotate service.Budget with @(
                 Action : 'planner.addChildBudget',
                 Label : 'Add Sub Budget',
             },
+            {
+                $Type : 'UI.DataFieldForAction',
+                Action : 'planner.autoAllocateBudget',
+                Label : 'Auto Allocate Budget',
+            },
         ],
     },
     UI.SelectionFields : [
@@ -223,20 +233,6 @@ annotate service.Budget with @(
                 Value : Responsible.Responsible_U_ID,
             },
         ],
-    },
-    UI.SelectionPresentationVariant #table : {
-        $Type : 'UI.SelectionPresentationVariantType',
-        PresentationVariant : {
-            $Type : 'UI.PresentationVariantType',
-            Visualizations : [
-                '@UI.LineItem',
-            ],
-        },
-        SelectionVariant : {
-            $Type : 'UI.SelectionVariantType',
-            SelectOptions : [
-            ],
-        },
     },
 );
 
@@ -288,5 +284,9 @@ annotate service.Users with {
 
 annotate service.Users with {
     last_name @Common.Text : first_name
+};
+
+annotate service.Budget with {
+    description @UI.MultiLineText : true
 };
 

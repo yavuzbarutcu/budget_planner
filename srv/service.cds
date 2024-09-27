@@ -8,10 +8,13 @@ service planner {
   actions{
       //Side effect annotation using an abosolute path
       @Common.SideEffects: {TargetEntities: ['childBudgets','budDistrib', 'budOpen']}
-      action addChildBudget (login_name: Users:login_name, description: String, budVal: Integer );
+      action addChildBudget (login_name: Users:login_name, description: String, budVal: Decimal(16,2) );
 
       @Common.SideEffects: {TargetEntities: ['/planner.EntityContainer/Budget','budDistrib', 'budOpen']}
       action deleteSubBudget ();
+
+      @Common.SideEffects: {TargetEntities: ['/planner.EntityContainer/Budget','budDistrib', 'budOpen']}
+      action calculateBudget (budVal: Decimal(16,2));
 
       @Common.SideEffects: {TargetEntities: ['/planner.EntityContainer/Budget']}
       action copyBudget ( description: String );
@@ -19,12 +22,15 @@ service planner {
       @Common.SideEffects: {TargetEntities: ['childBudgets']}
       action autoAllocateBudget ();
 
+      @Common.SideEffects: {TargetEntities: ['childBudgets']}
+      action autoCalculateShare ();
+
       action goToBudget ();
   };
 
   @Common.SideEffects: {TargetEntities: ['/planner.EntityContainer/Budget']}
-  action createNewBudget ( login_name: Users:login_name, budgetType:BudgetTypes:budgetType, description:String, budVal: Integer);
-  action deleteBudget ( budget: Budget, budVal: Integer ) returns { U_ID: String };
+  action createNewBudget ( login_name: Users:login_name, budgetType:BudgetTypes:budgetType, description:String, budVal: Decimal(16,2));
+  action deleteBudget ( budget: Budget, budVal: Decimal(16,2) ) returns { U_ID: String };
 
   
   action calculateBudget ( budget: Budget, budVal: Integer ) returns { U_ID: String };

@@ -25,12 +25,13 @@ entity Budget: managed, cuid, temporal {
         ParentBudget_U_ID  : UUID;
         BudgetType      : Association to one BudgetTypes;
         description     : String(100) not null;
-        phase           : String enum { Initial; Released } default 'Initial';
+        @readonly phase           : String enum { Initial; Released } default 'Initial';
         Responsible     : Association to Users;
         Material        : Association to Material;
-        budVal          : Decimal(16,2) null;
-        budDistrib      : Decimal(16,2) null;
-        budOpen         : Decimal(16,2) null;
+        @readonly budVal          : Decimal(16,2) null;
+        @readonly budDistrib      : Decimal(16,2) null;
+        @readonly budOpen         : Decimal(16,2) null;
+        percentage : Integer null;
         childBudgets    : Composition of many Budget on childBudgets.ParentBudget = $self;
 }
 

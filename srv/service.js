@@ -173,6 +173,7 @@ module.exports = async function (){
     return { U_ID: newBudgetUID };
   });
 
+
   // Action to split budget equally
   this.on('autoAllocateBudget', async req => {
     logger(req.params)
@@ -220,6 +221,133 @@ module.exports = async function (){
     
   });
 
+
+  // Action to calculate Sub Budget new Budget Value
+  this.on('calculateBudget', async req => {
+    const paramsSub = req.params[1];
+    const Budget_U_ID = paramsSub.U_ID
+    logger({"BudgetUID":Budget_U_ID})
+
+    // Get the ParentBudget_U_ID from the current context
+    const paramsParent = req.params[0];
+    const ParentBudget_U_ID = paramsParent.U_ID
+    if (!ParentBudget_U_ID) {
+      req.reject(400, 'Parent Budget U_ID is missing.');
+      return;
+    }
+
+    const { budVal } = req.data;
+    if (!budVal) {
+      req.reject(400, `Invalid budget value: ${budVal}`);
+      return;
+    }
+
+    // Get ParentBudgetRecord
+    const parentBudgetRecord = await 
+      SELECT.one('*')
+        .from(Budget)
+        .where({ U_ID: ParentBudget_U_ID });
+    if (!parentBudgetRecord) {
+      req.reject(400, `Invalid parent budget: ${ParentBudget_U_ID}`);
+      return;
+    }
+    logger(parentBudgetRecord)
+
+    // Get budgetRecord
+    const budgetRecord = await 
+    SELECT.one('*')
+      .from(Budget)
+      .where({ U_ID: Budget_U_ID });
+    if (!budgetRecord) {
+      req.reject(400, `Invalid budget: ${budgetRecord}`);
+      return;
+    }
+    logger(budgetRecord)
+
+    // Check available open Budget
+    // if new Budget Value greater than current Budget Value
+    if (budVal > budgetRecord.budVal) {
+      // check if enough open Header Budget available
+      if (budVal - budgetRecord.budVal > parentBudgetRecord.budOpen) {
+        req.reject(400, `No enough Budget! Open Budget Value: ${parentBudgetRecord.budOpen} €`);
+        return;
+      }
+    } else {
+      // New Budget is less than current Budget value
+      // Check if enough open budget to take back
+      if (budVal - budgetRecord.budVal + budgetRecord.budOpen < 0) {
+        req.reject(400, `No enough Open Budget to reduce current Budget! Open Budget Value: ${budgetRecord.budOpen} €`);
+        return;
+      }
+    }
+    const budToDist = budVal - budgetRecord.budVal;
+
+    cds.tx (async ()=>{
+      // Update Budget of Parent Budget
+      await UPDATE (Budget,parentBudgetRecord.U_ID) .with ({
+        budDistrib: {'+=': budToDist},
+        budOpen: {'-=': budToDist},
+      });
+
+      // Update Budget of Sub Budget
+      await UPDATE (Budget,budgetRecord.U_ID) .with ({
+        budVal: {'+=': budToDist},
+        budOpen: {'+=': budToDist},
+      });
+
+    })
+
+  })
+
+  // Action to claculate budget shares
+  this.on('autoCalculateShare', async req => {
+    logger(req.params)
+    logger(req.data)
+
+    // Get the ParentBudget_U_ID from the current context
+    const params = req.params[0];
+    const ParentBudget_U_ID = params.U_ID
+    if (!ParentBudget_U_ID) {
+      req.reject(400, 'Parent Budget U_ID is missing.');
+      return;
+    }
+
+    // Get ParentBudgetRecord
+    const parentBudget = await 
+      SELECT.one('*')
+        .from(Budget)
+        .where({ U_ID: ParentBudget_U_ID });
+    if (!parentBudget) {
+      req.reject(400, `No Budget found for the given BudgetID: ${ParentBudget_U_ID}`);
+      return;
+    }
+
+    // Get Budget List
+    const budgetList = await 
+      SELECT
+        .from(Budget)
+        .where({ ParentBudget_U_ID: ParentBudget_U_ID }).forUpdate();
+    if (!budgetList) {
+      req.reject(400, `No Sub Budget found for the given Budget: ${ParentBudget_U_ID}`);
+      return;
+    }
+
+    logger.info(`Budget List: ${budgetList}`);
+    const currentTime = new Date();
+    for (const budget in budgetList) {
+      logger.info(`Budget : ${budget.U_ID}`);
+      logger.info(`Parent Bud Val : ${parentBudget.budVal}. Budget Val: ${budget.budVal}`);
+      const share = budget.budVal / parentBudget.budVal * 100;
+      logger.info(`Share of Budget : ${share}`);
+      const result = await 
+        UPDATE (Budget,budget.U_ID) .with ({
+          percentage: 5
+        })
+      logger.info(result)
+    }
+    logger.info(`Shares of Header Budget ${ParentBudget_U_ID} has been calculated`);
+    
+  });
 
   // Check all Budget items 
   this.after ('READ','Budget', budget => {

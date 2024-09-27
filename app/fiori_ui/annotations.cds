@@ -1,8 +1,13 @@
 using planner as service from '../../srv/service';
 
+annotate service.Budget with @odata.draft.enabled;
+
 annotate service.Budget with @(
   Capabilities.InsertRestrictions : {
-    Insertable : true,
+    Insertable : false,
+  },
+  Capabilities.DeleteRestrictions : {
+    Deletable : false,
   },
     UI.FieldGroup #description : {
         $Type : 'UI.FieldGroupType',
@@ -116,11 +121,6 @@ annotate service.Budget with @(
         },
         {
             $Type : 'UI.DataField',
-            Value : phase,
-            Label : 'Phase',
-        },
-        {
-            $Type : 'UI.DataField',
             Value : budDistrib,
             Label : 'Distributed',
         },
@@ -130,14 +130,14 @@ annotate service.Budget with @(
             Label : 'Open',
         },
         {
-            $Type : 'UI.DataFieldForAction',
-            Action : 'planner.EntityContainer/calculateBudget',
-            Label : 'Calculate Budget',
+            $Type : 'UI.DataField',
+            Value : percentage,
+            Label : 'Share',
         },
         {
             $Type : 'UI.DataFieldForAction',
-            Action : 'planner.EntityContainer/calculateShare',
-            Label : 'Calculate Share',
+            Action : 'planner.calculateBudget',
+            Label : 'Calculate Budget',
         },
         {
             $Type : 'UI.DataFieldForAction',
@@ -145,7 +145,7 @@ annotate service.Budget with @(
             Label : 'Details',
             Inline : true,
             ![@UI.Importance] : #High,
-        },
+        }, 
         {
             $Type : 'UI.DataFieldForAction',
             Action : 'planner.deleteSubBudget',
@@ -218,6 +218,11 @@ annotate service.Budget with @(
                 $Type : 'UI.DataFieldForAction',
                 Action : 'planner.autoAllocateBudget',
                 Label : 'Auto Allocate Budget',
+            },
+            {
+                $Type : 'UI.DataFieldForAction',
+                Action : 'planner.autoCalculateShare',
+                Label : 'Auto Calculate Share',
             },
         ],
     },

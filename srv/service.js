@@ -210,7 +210,8 @@ module.exports = async function (){
     logger.info(`Budget Per Sub-Budget : ${valPerBudget}`);
     logger.info(`Splitting Budget of : ${ParentBudget_U_ID}`);
     const currentTime = new Date();
-    for (const budget in budgetList) {
+    for (const key in budgetList) {
+      const budget = budgetList[key];
       const result = await 
         UPDATE (Budget,budget.U_ID) .with ({
           budVal: valPerBudget
@@ -322,28 +323,34 @@ module.exports = async function (){
       return;
     }
 
+    logger.info(`Parent Bud : `);
+    logger(parentBudget);
     // Get Budget List
     const budgetList = await 
-      SELECT
+      SELECT('*')
         .from(Budget)
-        .where({ ParentBudget_U_ID: ParentBudget_U_ID }).forUpdate();
+        .where({ ParentBudget_U_ID: ParentBudget_U_ID });
     if (!budgetList) {
       req.reject(400, `No Sub Budget found for the given Budget: ${ParentBudget_U_ID}`);
       return;
     }
+    
 
-    logger.info(`Budget List: ${budgetList}`);
-    const currentTime = new Date();
-    for (const budget in budgetList) {
-      logger.info(`Budget : ${budget.U_ID}`);
-      logger.info(`Parent Bud Val : ${parentBudget.budVal}. Budget Val: ${budget.budVal}`);
-      const share = budget.budVal / parentBudget.budVal * 100;
-      logger.info(`Share of Budget : ${share}`);
-      const result = await 
-        UPDATE (Budget,budget.U_ID) .with ({
-          percentage: 5
-        })
-      logger.info(result)
+    logger(budgetList);
+    for (const key in budgetList) {
+      const budget = budgetList[key];
+      logger.info(`Child Bud -- :`);
+      logger.info(budget);
+      if(budget.U_ID){
+        logger.info(`Parent Bud Val : ${parentBudget.budVal}. Budget Val: ${budget.budVal}`);
+        const share = budget.budVal / parentBudget.budVal * 100;
+        const result = await 
+          UPDATE (Budget,budget.U_ID) .with ({
+            percentage: share
+          })
+        logger.info(`result: ${result}`);
+      }
+      
     }
     logger.info(`Shares of Header Budget ${ParentBudget_U_ID} has been calculated`);
     

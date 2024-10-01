@@ -132,7 +132,7 @@ annotate service.Budget with @(
         {
             $Type : 'UI.DataField',
             Value : percentage,
-            Label : 'Share',
+            Label : 'Share %',
         },
         {
             $Type : 'UI.DataFieldForAction',
